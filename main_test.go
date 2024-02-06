@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -35,10 +36,10 @@ func TestMainHandlerWhenCityNotSupported(t *testing.T) {
 	handler.ServeHTTP(responseRecorder, req)
 
 	status := responseRecorder.Code
-	err := responseRecorder.Body
+	err, _ := io.ReadAll(responseRecorder.Body)
 
 	require.Equal(t, status, http.StatusBadRequest)
-	require.Equal(t, err, "wrong city value")
+	require.Equal(t, string(err), "wrong city value")
 
 }
 
